@@ -7,11 +7,11 @@ WORKDIR /build
 
 # Cache Maven dependencies by copying pom.xml first
 COPY pom.xml .
-RUN mvn dependency:go-offline -B || true
+RUN mvn dependency:go-offline -B -ntp
 
 # Copy source code and build production fat JAR
 COPY src ./src
-RUN mvn clean package -DskipTests -B
+RUN mvn clean package -DskipTests -B -ntp
 
 # ------------------------------------------------------------------------------
 # Stage 2: Minimal production runtime with Eclipse Temurin JRE 21
@@ -36,5 +36,4 @@ EXPOSE 4040
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
 
 # Run the Spring Boot application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
-
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app.jar"]
