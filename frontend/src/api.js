@@ -1,5 +1,8 @@
 export const BRAND = 'EVENTTICKETINGSYSTEM'
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '')
+const configuredApiBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '')
+const API_BASE_URL = /^https?:\/\/[^/]+$/i.test(configuredApiBase)
+  ? `${configuredApiBase}/api`
+  : configuredApiBase
 
 export async function api(path, { method = 'GET', body } = {}) {
   const token = localStorage.getItem('token')
