@@ -1,10 +1,11 @@
 export const BRAND = 'EVENTTICKETINGSYSTEM'
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '')
 
 export async function api(path, { method = 'GET', body } = {}) {
   const token = localStorage.getItem('token')
   let res
   try {
-    res = await fetch('/api' + path, {
+    res = await fetch(API_BASE_URL + path, {
       method,
       headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
       body: body ? JSON.stringify(body) : undefined,
